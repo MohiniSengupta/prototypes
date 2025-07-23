@@ -1,0 +1,13 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+/shelf/
+/workspace.xml
+/mavenHomeManager.xml
+
+# Maven
+/target/
+
+# OS files
+.DS_Store
+Thumbs.db
