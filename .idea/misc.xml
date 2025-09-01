@@ -4,7 +4,7 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/bounded-connection-pool/pom.xml" />
+        <option value="$PROJECT_DIR$/connection-pooling/bounded-connection-pool/pom.xml" />
       </list>
     </option>
   </component>
