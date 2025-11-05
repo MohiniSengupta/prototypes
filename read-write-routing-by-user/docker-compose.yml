@@ -1,0 +1,53 @@
+services:
+  postgres-primary:
+    image: bitnami/postgresql:latest
+    container_name: rwrb_primary
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_POSTGRES_PASSWORD=postgres_pw
+      - POSTGRESQL_USERNAME=app
+      - POSTGRESQL_PASSWORD=app_pw
+      - POSTGRESQL_DATABASE=appdb
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_pw
+    volumes:
+      - ./docker-data/primary:/bitnami/postgresql
+      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "app", "-d", "appdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  postgres-replica:
+    image: bitnami/postgresql:latest
+    container_name: rwrb_replica
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRESQL_POSTGRES_PASSWORD=postgres_pw
+      - POSTGRESQL_USERNAME=app
+      - POSTGRESQL_PASSWORD=app_pw
+      - POSTGRESQL_DATABASE=appdb
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_MASTER_HOST=postgres-primary
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_pw
+    depends_on:
+      postgres-primary:
+        condition: service_healthy
+    volumes:
+      - ./docker-data/replica:/bitnami/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "app", "-d", "appdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+networks:
+  default:
+    name: rwrb_net
+

@@ -1,0 +1,21 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# IDEs
+.idea/
+.vscode/
+.project
+.classpath
+.settings/
+
+# Docker
+docker-data/
